@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>深入理解计算机系统_第四章 | Mickey M.J.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深入理解计算机系统-第四章1 Y86指令集体系结构
+一个处理器支持的指令和指令的字节级编码称为它的指令集体系结构。定义一个指令集体系结构，包括定义各种状态元素、指令集和它们的编码、一组编程规范和异常事件处理。
+
+1.1程序员可见的状态Y86程序中的每条指令都会读取或修改处理器状态的某些部分，这些被称为程序员可见状态。这里的程序员可以是写汇编代码的人，也可以是产生机器级代码的编译器。这些状态包括：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解计算机系统_第四章">
+<meta property="og:url" content="https://mickey-mj.github.io/2017/03/28/深入理解计算机系统_第四章/index.html">
+<meta property="og:site_name" content="Mickey M.J.">
+<meta property="og:description" content="深入理解计算机系统-第四章1 Y86指令集体系结构
+一个处理器支持的指令和指令的字节级编码称为它的指令集体系结构。定义一个指令集体系结构，包括定义各种状态元素、指令集和它们的编码、一组编程规范和异常事件处理。
+
+1.1程序员可见的状态Y86程序中的每条指令都会读取或修改处理器状态的某些部分，这些被称为程序员可见状态。这里的程序员可以是写汇编代码的人，也可以是产生机器级代码的编译器。这些状态包括：">
+<meta property="og:updated_time" content="2017-03-27T19:02:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解计算机系统_第四章">
+<meta name="twitter:description" content="深入理解计算机系统-第四章1 Y86指令集体系结构
+一个处理器支持的指令和指令的字节级编码称为它的指令集体系结构。定义一个指令集体系结构，包括定义各种状态元素、指令集和它们的编码、一组编程规范和异常事件处理。
+
+1.1程序员可见的状态Y86程序中的每条指令都会读取或修改处理器状态的某些部分，这些被称为程序员可见状态。这里的程序员可以是写汇编代码的人，也可以是产生机器级代码的编译器。这些状态包括：">
+  
+    <link rel="alternate" href="/atom.xml" title="Mickey M.J." type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Mickey M.J.</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://mickey-mj.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-深入理解计算机系统_第四章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/28/深入理解计算机系统_第四章/" class="article-date">
+  <time datetime="2017-03-27T18:39:29.000Z" itemprop="datePublished">2017-03-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入理解计算机系统_第四章
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="深入理解计算机系统-第四章"><a href="#深入理解计算机系统-第四章" class="headerlink" title="深入理解计算机系统-第四章"></a>深入理解计算机系统-第四章</h1><h2 id="1-Y86指令集体系结构"><a href="#1-Y86指令集体系结构" class="headerlink" title="1 Y86指令集体系结构"></a>1 Y86指令集体系结构</h2><blockquote>
+<p>一个处理器支持的指令和指令的字节级编码称为它的指令集体系结构。<br>定义一个指令集体系结构，包括定义各种状态元素、指令集和它们的编码、一组编程规范和异常事件处理。</p>
+</blockquote>
+<h3 id="1-1程序员可见的状态"><a href="#1-1程序员可见的状态" class="headerlink" title="1.1程序员可见的状态"></a>1.1程序员可见的状态</h3><p>Y86程序中的每条指令都会读取或修改处理器状态的某些部分，这些被称为程序员可见状态。这里的程序员可以是写汇编代码的人，也可以是产生机器级代码的编译器。这些状态包括：</p>
+<ul>
+<li>8个寄存器（一个寄存器作为栈指针）</li>
+<li>3个条件码</li>
+<li>程序计数器PC</li>
+<li>存储器</li>
+<li>程序状态码</li>
+</ul>
+<h3 id="1-2-Y86指令"><a href="#1-2-Y86指令" class="headerlink" title="1.2 Y86指令"></a>1.2 Y86指令</h3><ol>
+<li>movl指令集</li>
+<li>整数操作指令，addl、subl、andl、xorl</li>
+<li>跳转指令</li>
+<li>条件传送指令</li>
+<li>call指令、ret指令</li>
+<li>pushl和popl指令实现入栈和出栈</li>
+<li>halt指令停止指令的执行</li>
+</ol>
+<h3 id="1-3-指令编码"><a href="#1-3-指令编码" class="headerlink" title="1.3 指令编码"></a>1.3 指令编码</h3><p>每条指令需要1~6个字节。第一个字节表明类型，高4位为代码部分，低4位是功能部分。<br>8个寄存器每个都有相应的0~7的寄存器标识符。<br>可能附加寄存器指示符字节。只需要一个寄存器操作数的指令将另一个寄存器指示符设为0xF。<br>可能附加4字节常数。</p>
+<h3 id="1-4-Y86异常"><a href="#1-4-Y86异常" class="headerlink" title="1.4 Y86异常"></a>1.4 Y86异常</h3><ol>
+<li>AOK 程序执行正常</li>
+<li>HLT 处理器执行了一条halt指令</li>
+<li>ADR 处理器试图从一个非法存储器地址读或者向一个非法地址写</li>
+<li>INS 遇到非法指令代码</li>
+</ol>
+<p>遇到异常状态时，完整的设计会调用一个异常处理程序（exception handler）或自定义的信号处理程序(signal handler)。</p>
+<h3 id="1-5-Y86程序"><a href="#1-5-Y86程序" class="headerlink" title="1.5 Y86程序"></a>1.5 Y86程序</h3><h3 id="1-6-一些Y86指令的详情"><a href="#1-6-一些Y86指令的详情" class="headerlink" title="1.6 一些Y86指令的详情"></a>1.6 一些Y86指令的详情</h3><h2 id="2-逻辑设计和硬件控制语言HCL"><a href="#2-逻辑设计和硬件控制语言HCL" class="headerlink" title="2 逻辑设计和硬件控制语言HCL"></a>2 逻辑设计和硬件控制语言HCL</h2><blockquote>
+<p>一个数字系统的三个主要组成部分：计算对位进行操作的函数的组合逻辑、存储位的存储器元素、控制存储器元素更新的时钟信号</p>
+</blockquote>
+<h3 id="2-1-逻辑门"><a href="#2-1-逻辑门" class="headerlink" title="2.1 逻辑门"></a>2.1 逻辑门</h3><p>&amp;&amp;、||、！</p>
+<h3 id="2-2-组合电路和HCL布尔表达式"><a href="#2-2-组合电路和HCL布尔表达式" class="headerlink" title="2.2 组合电路和HCL布尔表达式"></a>2.2 组合电路和HCL布尔表达式</h3><h3 id="2-3-字级的组合电路和HCL整数表达式"><a href="#2-3-字级的组合电路和HCL整数表达式" class="headerlink" title="2.3 字级的组合电路和HCL整数表达式"></a>2.3 字级的组合电路和HCL整数表达式</h3><h3 id="2-4-集合关系"><a href="#2-4-集合关系" class="headerlink" title="2.4 集合关系"></a>2.4 集合关系</h3><h3 id="2-5存储器和时钟"><a href="#2-5存储器和时钟" class="headerlink" title="2.5存储器和时钟"></a>2.5存储器和时钟</h3><p>时钟寄存器。存储单个位或字，时钟信号控制寄存器加载输入值。<br>随机访问存储器。存储多个字，用地址来选择该读或该写哪个字。</p>
+<h2 id="3-Y86的顺序实现"><a href="#3-Y86的顺序实现" class="headerlink" title="3 Y86的顺序实现"></a>3 Y86的顺序实现</h2><p>每个时钟周期上顺序处理器SEQ执行处理一条完整指令的所有步骤。</p>
+<h3 id="3-1-将处理组织成段"><a href="#3-1-将处理组织成段" class="headerlink" title="3.1 将处理组织成段"></a>3.1 将处理组织成段</h3><ol>
+<li><strong>取指</strong>：从存储器读取指令字节，地址为程序计数器PC的值。从指令中抽取出指令指示符字节的两个四位部分，称为指令代码icode和ifun指令功能。它可能取出一个寄存器指示符字节，指明一个或两个寄存器操作数指示符rA和rB。它还可能取出一个四字节常数字valC。它按照顺序方式计算当前指令的下一条指令的地址valP。也就是说，valP等于PC的值加上已取出指令的长度。</li>
+</ol>
+<ul>
+<li><strong>译码</strong>：译码阶段从寄存器文件读入最多两个操作数，得到值valA和或valB。有些指令则是读取%esp的值。</li>
+<li><strong>执行</strong>：算术/逻辑单元ALU要么执行指令指明的操作（根据ifun的值），计算存储器引用的有效地址，要么增加或减少栈指针。得到的值我们称为valE也可能设置条件码。对一条跳转指令来说，这个阶段会检验条件码和分支条件，看是不是应该选择分支。</li>
+<li><strong>访存</strong>：将数据写入存储器，或者从存储器读出数据。</li>
+<li><strong>写回</strong>：最多可以写两个结果到寄存器文件。</li>
+<li><strong>更新PC</strong>：将PC设置成下一条指令的地址。</li>
+</ul>
+<h3 id="3-2-SEQ硬件结构"><a href="#3-2-SEQ硬件结构" class="headerlink" title="3.2 SEQ硬件结构"></a>3.2 SEQ硬件结构</h3><blockquote>
+<p>与六个基本阶段中各个阶段对应的硬件单元hardware unit负责执行这些处理。</p>
+</blockquote>
+<ol>
+<li><strong>取指</strong>：将程序计数器PC寄存器作为地址，指令存储器读取指令的字节。PC增加器计算valP，即增加了的程序计数器。</li>
+<li><strong>译码</strong>：寄存器文件有两个读端口A和B，从这两个端口同时读寄存器值valA和valB。</li>
+<li><strong>执行</strong>：执行阶段会根据指令的类型，将算术/逻辑单元ALU用于不同的目的。整数操作执行运算，其它指令作为加法器来增加或者减少指针，或者计算有效地址，或只是简单的加0，将一个输入传递到输出。条件码寄存器CC有三个条件码位。ALU负责计算条件码的新值。当执行一条跳转指令时，会根据条件码和跳转类型来计算分支信号Cnd。</li>
+<li><strong>访存</strong>：数据存储器读出或写入一个存储器字。指令和数据存储器访问的是相同的存储器位置，但是用于不同的目的。</li>
+<li><strong>写回</strong>：寄存器有两个写端口。端口E用来写ALU计算出来的值，而端口M用来写从数据存储器中读出的值。</li>
+</ol>
+<h3 id="3-3SEQ的时序"><a href="#3-3SEQ的时序" class="headerlink" title="3.3SEQ的时序"></a>3.3SEQ的时序</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://mickey-mj.github.io/2017/03/28/深入理解计算机系统_第四章/" data-id="cj0shdjng00006m717fhh77h5" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深入理解计算机系统/">深入理解计算机系统</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/深入理解计算机系统/">深入理解计算机系统</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/深入理解计算机系统/" style="font-size: 10px;">深入理解计算机系统</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/28/深入理解计算机系统_第四章/">深入理解计算机系统_第四章</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 刘民霁<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
